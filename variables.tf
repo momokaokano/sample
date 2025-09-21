@@ -5,5 +5,5 @@ variable "aws_region" {
 
 variable "name_prefix" {
   type    = string
-  default = "gha-terraform-demo"
+  default = "GitHubActionsTest"
 }
