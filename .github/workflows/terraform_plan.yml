@@ -1,0 +1,33 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write   # PRにコメントする場合に必要
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -no-color -out=tfplan
+
+      - name: Show Plan
+        run: terraform show -no-color tfplan > plan.txt
+
+      - name: Comment PR with Plan
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: plan.txt
